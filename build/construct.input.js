@@ -22,7 +22,7 @@
 	construct.config = Object.extend(construct.config, {
 		"paths": {
 			"backbone.ui.keys" : [
-				"//rawgithub.com/backbone-input/keys/master/build/backbone.input.keys"
+				"//rawgithub.com/backbone-input/keys/master/dist/backbone.keys.min"
 			],
 			"backbone.ui.touch" : [
 				"//rawgithub.com/backbone-input/touch/master/dist/backbone.touch.min"

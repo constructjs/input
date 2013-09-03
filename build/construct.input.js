@@ -7,13 +7,13 @@
 		//console.log(options);
 
 		// lookup options
-		if( options.indexOf("keys") > -1 ) construct.config.deps.push("backbone.keys");
-		if( options.indexOf("mouse") > -1 ) construct.config.deps.push("backbone.mouse");
-		if( options.indexOf("touch") > -1 ) construct.config.deps.push("backbone.touch");
+		if( options.indexOf("keys") > -1 ) construct.config.deps.push("backbone.ui.keys");
+		if( options.indexOf("mouse") > -1 ) construct.config.deps.push("backbone.ui.mouse");
+		if( options.indexOf("touch") > -1 ) construct.config.deps.push("backbone.ui.touch");
 		if( options.indexOf("gamepad") > -1 ) construct.config.deps.push("gamepad");
 
 		return function( e ){
-			console.log( "update" );
+			//console.log( "update" );
 		};
 
 	};
@@ -21,18 +21,17 @@
 	// Dependencies
 	construct.config = Object.extend(construct.config, {
 		"paths": {
-			"backbone.keys" : [
-				"//raw.github.com/constructjs/backbone.keys/master/backbone.keys"
+			"backbone.ui.keys" : [
+				"//rawgithub.com/backbone-input/keys/master/build/backbone.input.keys"
 			],
-			"backbone.touch" : [
-				"//raw.github.com/constructjs/backbone.touch/master/backbone.touch"
+			"backbone.ui.touch" : [
+				"//rawgithub.com/backbone-input/touch/master/dist/backbone.touch.min"
 			],
-			"backbone.mouse" : [
-				//"https://gist.github.com/raw/4333890/9b8eebf4e1594d79760485eb818fd292691bc8c8/backbone.mouse",
-				"lib/backbone.mouse"
+			"backbone.ui.mouse" : [
+				"//rawgithub.com/backbone-input/mouse/master/backbone.input.mouse"
 			],
 			"gamepad" : [
-				"//raw.github.com/constructjs/gamepad.js/master/gamepad"
+				"//rawgithub.com/constructjs/gamepad.js/master/gamepad"
 			]
 		},
 		"shim": {

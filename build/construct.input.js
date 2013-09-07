@@ -28,13 +28,13 @@
 	construct.config = Object.extend(construct.config, {
 		"paths": {
 			"backbone.ui.keys" : [
-				"//rawgithub.com/backbone-input/keys/master/dist/backbone.keys.min"
+				"//rawgithub.com/backbone-input/keys/0.3.0/dist/backbone.keys.min"
 			],
 			"backbone.ui.touch" : [
-				"//rawgithub.com/backbone-input/touch/master/dist/backbone.touch.min"
+				"//rawgithub.com/backbone-input/touch/0.3.0/dist/backbone.touch.min"
 			],
 			"backbone.ui.mouse" : [
-				"//rawgithub.com/backbone-input/mouse/master/backbone.input.mouse"
+				"//rawgithub.com/backbone-input/mouse/0.2.0/backbone.input.mouse"
 			],
 			"gamepad" : [
 				"//rawgithub.com/constructjs/gamepad.js/master/gamepad"

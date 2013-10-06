@@ -114,8 +114,9 @@ construct.promise.add(function(){
 			//
 			var vector = new THREE.Vector3( x, y, z );
 			var camera = this.$3d.active.camera;
-			// get the objects (map as array...)
-			var objects = $.map(this.$3d.objects, function (value, key) { return (value.children.length) ? value.children[0] : value; });
+			// get the meshes (map as array...)
+			var objects = getMeshes( this.$3d.objects );
+
 			//this.$3d
 			this.$3d.projector.unprojectVector( vector, camera );
 
@@ -139,5 +140,25 @@ construct.promise.add(function(){
 
 	});
 
+	// Helpers
+	// - loop through objects to get meshes
+	function getMeshes( objects, meshes ){
+		//fallbacks
+		objects = objects || {};
+		meshes = meshes || [];
+		for( var i in objects) {
+			var object = objects[i];
+			if( object instanceof THREE.Mesh ){
+				meshes.push( object );
+			} else {
+				// assume it's an Object3D
+				if( object.children ) {
+					meshes = meshes.concat( getMeshes( object.children ) );
+				}
+			}
+		}
+
+		return meshes;
+	}
 
 });

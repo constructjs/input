@@ -4,6 +4,7 @@
 
 	construct.input = function( options ){
 		// options is an array...
+		options = options || [];
 		//console.log(options);
 
 		// lookup options
@@ -17,6 +18,9 @@
 			construct.config.deps.push("backbone.ui.touch");
 		}
 		if( options.indexOf("gamepad") > -1 ) construct.config.deps.push("gamepad");
+
+		// save options
+		Object.extend(construct.options, { input: options });
 
 		return function( e ){
 			//console.log( "update" );
@@ -59,3 +63,33 @@
 	});
 
 })();
+
+// Views
+
+// Add models after dependencies are loaded
+construct.promise.add(function(){
+
+
+// in case APP.Mesh has already been defined by a plugin
+	var Mesh = APP.Mesh || View;
+
+	APP.Mesh = Mesh.extend({
+		initialize: function( options ){
+			var types = construct.options.input;
+			// lookup input types
+			if( types.indexOf("keys") > -1 ) {
+			}
+			if( types.indexOf("mouse") > -1 ) {
+			}
+			if( types.indexOf("touch") > -1 ) {
+			}
+			if( types.indexOf("gamepad") > -1 ){
+			}
+
+			return Mesh.prototype.initialize.call(this, options);
+		}
+
+	});
+
+
+});

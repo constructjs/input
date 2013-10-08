@@ -119,7 +119,6 @@ construct.promise.add(function(){
 			this.params.set({
 				mouse: { x : x, y : y }
 			});
-			alert("Sddd");
 			this.checkIntersect();
 			// user defined
 			if( this.ontouch ) this.ontouch( e );

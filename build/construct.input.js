@@ -69,8 +69,21 @@
 // Add models after dependencies are loaded
 construct.promise.add(function(){
 
+	// add the appropariate events based on the input methods initialized
+	var types = construct.options.input || [];
+	var events = {};
+	// lookup input types
+	if( types.indexOf("keys") > -1 ) {
+	}
+	if( types.indexOf("mouse") > -1 ) {
+	}
+	if( types.indexOf("touch") > -1 && isTouch() ) {
+		events.click = "_ontouch";
+	}
+	if( types.indexOf("gamepad") > -1 ){
+	}
 
-// in case APP.Mesh has already been defined by a plugin
+	// in case APP.Mesh has already been defined by a plugin
 	var Main3D = APP.Views.Main3D || APP.View;
 
 	APP.Views.Main3D = Main3D.extend({
@@ -79,17 +92,9 @@ construct.promise.add(function(){
 			monitorMove: true
 		},
 
+		events: events,
+
 		initialize: function( options ){
-			var types = construct.options.input || [];
-			// lookup input types
-			if( types.indexOf("keys") > -1 ) {
-			}
-			if( types.indexOf("mouse") > -1 ) {
-			}
-			if( types.indexOf("touch") > -1 ) {
-			}
-			if( types.indexOf("gamepad") > -1 ){
-			}
 
 			this.on("intersect", _.bind(this.clickObject, this));
 
@@ -103,6 +108,40 @@ construct.promise.add(function(){
 		},
 
 		mousedown: function(){
+			this.checkIntersect();
+		},
+
+		_ontouch: function( e ){
+			// internal...
+			 var touch = e.originalEvent.changedTouches[0];
+			var x = touch.clientX;
+			var y = touch.clientY;
+			this.params.set({
+				mouse: { x : x, y : y }
+			});
+			alert("Sddd");
+			this.checkIntersect();
+			// user defined
+			if( this.ontouch ) this.ontouch( e );
+		},
+		/*
+		_touchmove: function(){
+			// internal...
+			// user defined
+			if( this.touchmove ) this.touchmove( e );
+		},
+
+		_touchend: function(){
+			// internal...
+			// user defined
+			if( this.touchend ) this.touchend( e );
+		},
+		*/
+		clickObject: function( objects ){
+			console.log("clickObject:", objects);
+		},
+
+		checkIntersect: function(){
 
 			var $el = $(this.el),
 				elOffset = $el.offset(),
@@ -132,10 +171,6 @@ construct.promise.add(function(){
 				// console.log( JSON.stringify( intersects[0].object.parent.rotation ) );
 			}
 
-		},
-
-		clickObject: function( objects ){
-			console.log("clickObject:", objects);
 		}
 
 	});
@@ -159,6 +194,11 @@ construct.promise.add(function(){
 		}
 
 		return meshes;
+	}
+
+	// this method also exists in APP.View as part of the touch plugin...
+	function isTouch() {
+		return 'ontouchstart' in document && !('callPhantom' in window);
 	}
 
 });

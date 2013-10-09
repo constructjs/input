@@ -1,6 +1,6 @@
 {
   "name": "construct.input",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "main": ["./build/construct.input.js"],
   "dependencies": { 
 	  "backbone.input.keys" : "0.3.0", 

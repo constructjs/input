@@ -1,6 +1,6 @@
 # Construct: Input
 
-An extension for [Constrcut.js](http://github.com/makesites/construct) to include bindingd for various input devices - namely: mouse, touch, gamepad. 
+An extension for [Construct.js](http://github.com/makesites/construct) to include bindings for various input devices - namely: mouse, touch, gamepad. 
 
 
 ## Install

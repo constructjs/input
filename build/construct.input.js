@@ -38,7 +38,7 @@
 				"//rawgithub.com/backbone-input/touch/0.3.0/dist/backbone.touch.min"
 			],
 			"backbone.ui.mouse" : [
-				"//rawgithub.com/backbone-input/mouse/0.2.0/backbone.input.mouse"
+				"//rawgithub.com/backbone-input/mouse/master/backbone.input.mouse"
 			],
 			"gamepad" : [
 				"//rawgithub.com/constructjs/gamepad.js/master/gamepad"

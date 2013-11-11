@@ -45,14 +45,21 @@
 			]
 		},
 		"shim": {
-			"backbone.keys": {
+			"backbone.ui.keys": {
 				"deps": [
 					"backbone",
 					"underscore",
 					"jquery"
 				]
 			},
-			"backbone.touch": {
+			"backbone.ui.touch": {
+				"deps": [
+					"backbone",
+					"underscore",
+					"jquery"
+				]
+			},
+			"backbone.ui.mouse": {
 				"deps": [
 					"backbone",
 					"underscore",

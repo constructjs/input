@@ -17,8 +17,10 @@
 			construct.config.shim["backbone.app"].deps.push("backbone.ui.touch");
 			construct.config.deps.push("backbone.ui.touch");
 		}
-		if( options.indexOf("gamepad") > -1 ) construct.config.deps.push("gamepad");
-
+		if( options.indexOf("gamepad") > -1 ) {
+			construct.config.shim["backbone.app"].deps.push("backbone.ui.gamepad");
+			construct.config.deps.push("backbone.ui.gamepad");
+		}
 		// save options
 		Object.extend(construct.options, { input: options });
 
@@ -40,8 +42,8 @@
 			"backbone.ui.mouse" : [
 				"//rawgithub.com/backbone-input/mouse/master/backbone.input.mouse"
 			],
-			"gamepad" : [
-				"//rawgithub.com/constructjs/gamepad.js/master/gamepad"
+			"backbone.ui.gamepad" : [
+				"//rawgithub.com/backbone-input/gamepad/master/backbone.input.gamepad"
 			]
 		},
 		"shim": {
@@ -64,6 +66,12 @@
 					"backbone",
 					"underscore",
 					"jquery"
+				]
+			},
+			"backbone.ui.touch": {
+				"deps": [
+					"backbone",
+					"underscore"
 				]
 			}
 		}

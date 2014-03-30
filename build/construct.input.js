@@ -96,6 +96,7 @@ construct.promise.add(function(){
 		events.click = "_ontouch";
 	}
 	if( types.indexOf("gamepad") > -1 ){
+
 	}
 
 	// in case APP.Mesh has already been defined by a plugin
@@ -104,7 +105,8 @@ construct.promise.add(function(){
 	APP.Views.Main3D = Main3D.extend({
 
 		options: {
-			monitorMove: true
+			//monitorMove: true
+			monitor: construct.options.input
 		},
 
 		events: events,

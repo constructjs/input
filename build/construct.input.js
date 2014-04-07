@@ -2,7 +2,8 @@
 	// exit now if contruct hasn't already been defined
 	if(typeof construct == "undefined") return;
 
-	construct.input = function( options ){
+
+		construct.input = function( options ){
 		// options is an array...
 		options = options || [];
 		//console.log(options);
@@ -29,6 +30,7 @@
 		};
 
 	};
+
 
 	// Dependencies
 	construct.config = Object.extend(construct.config, {
@@ -67,22 +69,12 @@
 					"underscore",
 					"jquery"
 				]
-			},
-			"backbone.ui.touch": {
-				"deps": [
-					"backbone",
-					"underscore"
-				]
 			}
 		}
 	});
 
-})();
 
-// Views
-
-// Add models after dependencies are loaded
-construct.promise.add(function(){
+function extendMain3D(){
 
 	// add the appropariate events based on the input methods initialized
 	var types = construct.options.input || [];
@@ -130,7 +122,7 @@ construct.promise.add(function(){
 
 		_ontouch: function( e ){
 			// internal...
-			 var touch = e.originalEvent.changedTouches[0];
+			var touch = e.originalEvent.changedTouches[0];
 			var x = touch.clientX;
 			var y = touch.clientY;
 			this.params.set({
@@ -191,6 +183,8 @@ construct.promise.add(function(){
 
 	});
 
+}
+function extendPlayer(){
 
 	APP.Meshes.Player = APP.Meshes.Player.extend({
 
@@ -230,6 +224,8 @@ construct.promise.add(function(){
 	});
 
 
+}
+
 	// Helpers
 	// - loop through objects to get meshes
 	function getMeshes( objects, meshes ){
@@ -256,4 +252,12 @@ construct.promise.add(function(){
 		return 'ontouchstart' in document && !('callPhantom' in window);
 	}
 
-});
+
+
+	// Update views after dependencies are loaded
+	construct.promise.add(function(){
+		extendMain3D();
+		extendPlayer();
+	});
+
+})();

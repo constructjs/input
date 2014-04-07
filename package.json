@@ -1,0 +1,29 @@
+{
+	"name": "construct.input",
+	"version": "0.3.0",
+	"author": "makesites",
+	"description": "A construct.js extension that abstracts the use of backbone-input",
+	"homepage": "https://github.com/constructjs/input",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/constructjs/input.git"
+	},
+	"bugs": {
+		"url": "https://github.com/constructjs/input/issues"
+	},
+	"licenses": [
+		{
+			"type": "MIT license",
+			"url": "http://makesites.org/licenses/MIT"
+		}
+	],
+	"engine" : {
+		"node" : ">=0.8.x"
+	},
+	"dependencies": {
+		"commander" : "~0.5",
+		"jshint" : "~0.9",
+		"uglify-js" : "2.x",
+		"hbs" : "~1.0"
+	}
+}

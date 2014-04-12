@@ -1,6 +1,6 @@
 {
 	"name": "construct.input",
-	"version": "0.3.0",
+	"version": "0.4.0",
 	"author": "makesites",
 	"description": "A construct.js extension that abstracts the use of backbone-input",
 	"homepage": "https://github.com/constructjs/input",

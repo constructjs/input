@@ -1,4 +1,18 @@
-(function(){
+/**
+ * @name construct.input
+ * A construct.js extension that abstracts the use of backbone-input
+ *
+ * Version: 0.4.0 (Sat, 12 Apr 2014 06:43:23 GMT)
+ * Homepage: https://github.com/constructjs/input
+ *
+ * @author makesites
+ * Initiated by: Makis Tracend (@tracend)
+ *
+ * @cc_on Copyright © Makesites.org
+ * @license MIT license
+ */
+
+ (function(){
 	// exit now if contruct hasn't already been defined
 	if(typeof construct == "undefined") return;
 
@@ -10,17 +24,20 @@
 
 		// lookup options
 		if( options.indexOf("keys") > -1 ) {
-			construct.config.shim["backbone.app"].deps.push("backbone.ui.keys");
-			construct.config.deps.push("backbone.ui.keys");
+			construct.config.shim["backbone.app"].deps.push("backbone.input.keys");
+			construct.config.deps.push("backbone.input.keys");
 		}
-		if( options.indexOf("mouse") > -1 ) construct.config.deps.push("backbone.ui.mouse");
+		if( options.indexOf("mouse") > -1 ) {
+			construct.config.shim["backbone.app"].deps.push("backbone.input.mouse");
+			construct.config.deps.push("backbone.input.mouse");
+		}
 		if( options.indexOf("touch") > -1 ) {
-			construct.config.shim["backbone.app"].deps.push("backbone.ui.touch");
-			construct.config.deps.push("backbone.ui.touch");
+			construct.config.shim["backbone.app"].deps.push("backbone.input.touch");
+			construct.config.deps.push("backbone.input.touch");
 		}
 		if( options.indexOf("gamepad") > -1 ) {
-			construct.config.shim["backbone.app"].deps.push("backbone.ui.gamepad");
-			construct.config.deps.push("backbone.ui.gamepad");
+			construct.config.shim["backbone.app"].deps.push("backbone.input.gamepad");
+			construct.config.deps.push("backbone.input.gamepad");
 		}
 		// save options
 		Object.extend(construct.options, { input: options });
@@ -35,35 +52,35 @@
 	// Dependencies
 	construct.config = Object.extend(construct.config, {
 		"paths": {
-			"backbone.ui.keys" : [
+			"backbone.input.keys" : [
 				"//rawgithub.com/backbone-input/keys/master/build/backbone.input.keys"
 			],
-			"backbone.ui.touch" : [
+			"backbone.input.touch" : [
 				"//rawgithub.com/backbone-input/touch/master/build/backbone.input.touch"
 			],
-			"backbone.ui.mouse" : [
+			"backbone.input.mouse" : [
 				"//rawgithub.com/backbone-input/mouse/master/build/backbone.input.mouse"
 			],
-			"backbone.ui.gamepad" : [
+			"backbone.input.gamepad" : [
 				"//rawgithub.com/backbone-input/gamepad/master/build/backbone.input.gamepad"
 			]
 		},
 		"shim": {
-			"backbone.ui.keys": {
+			"backbone.input.keys": {
 				"deps": [
 					"backbone",
 					"underscore",
 					"jquery"
 				]
 			},
-			"backbone.ui.touch": {
+			"backbone.input.touch": {
 				"deps": [
 					"backbone",
 					"underscore",
 					"jquery"
 				]
 			},
-			"backbone.ui.mouse": {
+			"backbone.input.mouse": {
 				"deps": [
 					"backbone",
 					"underscore",
@@ -91,8 +108,8 @@ function extendMain3D(){
 
 	}
 
-	// in case APP.Mesh has already been defined by a plugin
-	var Main3D = APP.Views.Main3D || APP.View;
+	// save parent
+	var Main3D = APP.Views.Main3D;
 
 	APP.Views.Main3D = Main3D.extend({
 
@@ -105,7 +122,11 @@ function extendMain3D(){
 
 		initialize: function( options ){
 
-			this.on("intersect", _.bind(this.clickObject, this));
+			// monitor mouse
+			var monitor = this.options.monitorMove || _.inArray("mouse", this.options.monitor);
+			if( monitor ){
+				this.on("intersect", _.bind(this.clickObject, this));
+			}
 
 			return Main3D.prototype.initialize.call(this, options);
 		},
@@ -114,6 +135,13 @@ function extendMain3D(){
 			// create a projector for the click events
 			$3d.projector = new THREE.Projector();
 			return Main3D.prototype._start.call(this, $3d);
+		},
+
+		//onMouseMove
+		mousemove: function( e ){
+			// broadcast updates to player
+			var player = this.objects.get("player");
+			if( player && player.onMouseMove ) player.onMouseMove( e );
 		},
 
 		mousedown: function(){

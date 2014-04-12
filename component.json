@@ -1,10 +1,10 @@
 {
   "name": "construct.input",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "main": ["./build/construct.input.js"],
   "dependencies": { 
-	  "backbone.input.keys" : "0.3.0", 
-	  "backbone.input.touch" : "0.3.0", 
-	  "backbone.input.mouse" : "0.2.0"
+	  "backbone.input.keys" : "*", 
+	  "backbone.input.touch" : "*", 
+	  "backbone.input.mouse" : "*"
   }
 }

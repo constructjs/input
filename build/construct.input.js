@@ -2,7 +2,7 @@
  * @name construct.input
  * A construct.js extension that abstracts the use of backbone-input
  *
- * Version: 0.4.0 (Sat, 12 Apr 2014 06:43:23 GMT)
+ * Version: 0.4.0 (Sun, 13 Apr 2014 08:34:13 GMT)
  * Homepage: https://github.com/constructjs/input
  *
  * @author makesites
@@ -39,6 +39,10 @@
 			construct.config.shim["backbone.app"].deps.push("backbone.input.gamepad");
 			construct.config.deps.push("backbone.input.gamepad");
 		}
+		if( options.indexOf("motion") > -1 ) {
+			construct.config.shim["backbone.app"].deps.push("backbone.input.motion");
+			construct.config.deps.push("backbone.input.motion");
+		}
 		// save options
 		Object.extend(construct.options, { input: options });
 
@@ -63,6 +67,9 @@
 			],
 			"backbone.input.gamepad" : [
 				"//rawgithub.com/backbone-input/gamepad/master/build/backbone.input.gamepad"
+			],
+			"backbone.input.motion" : [
+				"//rawgithub.com/backbone-input/motion/master/build/backbone.input.motion"
 			]
 		},
 		"shim": {
@@ -81,6 +88,13 @@
 				]
 			},
 			"backbone.input.mouse": {
+				"deps": [
+					"backbone",
+					"underscore",
+					"jquery"
+				]
+			},
+			"backbone.input.motion": {
 				"deps": [
 					"backbone",
 					"underscore",

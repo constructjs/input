@@ -2,7 +2,7 @@
  * @name construct.input
  * A construct.js extension that abstracts the use of backbone-input
  *
- * Version: 0.4.0 (Sun, 13 Apr 2014 10:34:12 GMT)
+ * Version: 0.4.0 (Mon, 14 Apr 2014 05:27:52 GMT)
  * Homepage: https://github.com/constructjs/input
  *
  * @author makesites
@@ -420,8 +420,45 @@ function extendPlayer(){
 		},
 
 		// motion support
-		onMotionAccelerometer: function( data ){
+		onMotionAccelerometer: function( ){
+			// prerequisite
+			if( !_.inArray("motion", this.options.monitor) ||  !_.inArray("accelerometer", this.options.states.motion) ) return;
 
+			var data = this.params.get("accelerometer");
+
+			var container = this.getContainerDimensions();
+			var halfWidth  = container.size[ 0 ] / 2;
+			var halfHeight = container.size[ 1 ] / 2;
+
+			//this.state.move.yawLeft   = - ( ( data.x - container.offset[ 0 ] ) - halfWidth  ) / halfWidth;
+			//this.state.move.pitchDown =   ( ( data.y - container.offset[ 1 ] ) - halfHeight ) / halfHeight;
+
+			// tabletop
+			//this.state.move.yawLeft   = - data.z * Math.PI/180;
+			//this.state.move.pitchDown =  data.y * Math.PI/180;
+
+			// fly
+			// y goes from 90 to -90 and from 180 to -180
+			var directionX = ( data.y > 0 ) ? 1 : -1;
+			var yaw = ( Math.abs( data.y ) < 90 ) ? data.y : directionX * (180 - Math.abs( data.y )) ;
+			this.state.move.yawLeft = - yaw/90;
+			//console.log( this.state.move.yawLeft );
+			// account for resetting the z axis
+			var directionY = ( data.z < 0 ) ? 1 : -1;
+			this.state.move.pitchDown = directionY * ( 1 - ( Math.abs( data.z )/90 ) );
+
+			this.updateRotationVector();
+
+		},
+
+		onOrientationUpdate: function(){
+			// prerequisite
+			if( !_.inArray("motion", this.options.monitor) ||  !_.inArray("rift", this.options.states.motion) ) return;
+
+			var data = this.params.get("rift");
+			this.tmpQuaternion = new THREE.Quaternion(data.x, data.y, data.z, data.w);
+
+			// bypass updateRotationVector?
 		},
 
 		// Controls
@@ -430,12 +467,18 @@ function extendPlayer(){
 			// controls update only after the object is loaded
 			if( !this.object) return;
 
+			var vr = ( _.inArray("motion", this.options.monitor) &&  _.inArray("rift", this.options.states.motion) );
+
 			switch( this.options.controls ){
 				case "walk":
 					this.updateControlsWalk(e);
 				break;
 				case "fly":
-					this.updateControlsFly(e);
+					if( vr ){
+						this.updateControlsFlyVR(e);
+					} else {
+						this.updateControlsFly(e);
+					}
 				break;
 				default:
 					// nothing?
@@ -459,6 +502,26 @@ function extendPlayer(){
 
 			this.tmpQuaternion.set( this.rotationVector.x * rotMult, this.rotationVector.y * rotMult, this.rotationVector.z * rotMult, 1 ).normalize();
 			this.object.quaternion.multiply( this.tmpQuaternion );
+
+			// expose the rotation vector for convenience
+			this.object.rotation.setFromQuaternion( this.object.quaternion, this.object.rotation.order );
+
+		},
+
+		updateControlsFlyVR: function( e ){
+
+			// remove when the object is no longer visible
+			var $3d = e.target;
+			// look around...
+			var delta = $3d.clock.getDelta();
+			var moveMult = delta * this.options.moveStep;
+			var rotMult = delta * this.options.rotateStep;
+
+			this.object.translateX( this.moveVector.x * moveMult );
+			this.object.translateY( this.moveVector.y * moveMult );
+			this.object.translateZ( this.moveVector.z * moveMult );
+
+			this.object.quaternion.set( this.tmpQuaternion.x, this.tmpQuaternion.y, this.tmpQuaternion.z, this.tmpQuaternion.w  );
 
 			// expose the rotation vector for convenience
 			this.object.rotation.setFromQuaternion( this.object.quaternion, this.object.rotation.order );

@@ -2,7 +2,7 @@
  * @name construct.input
  * A construct.js extension that abstracts the use of backbone-input
  *
- * Version: 0.4.0 (Sun, 13 Apr 2014 08:34:13 GMT)
+ * Version: 0.4.0 (Sun, 13 Apr 2014 10:34:12 GMT)
  * Homepage: https://github.com/constructjs/input
  *
  * @author makesites
@@ -419,6 +419,12 @@ function extendPlayer(){
 
 		},
 
+		// motion support
+		onMotionAccelerometer: function( data ){
+
+		},
+
+		// Controls
 
 		_updateControls: function( e ){
 			// controls update only after the object is loaded

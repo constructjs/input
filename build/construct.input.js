@@ -2,7 +2,7 @@
  * @name construct.input
  * A construct.js extension that abstracts the use of backbone-input
  *
- * Version: 0.4.0 (Mon, 14 Apr 2014 05:27:52 GMT)
+ * Version: 0.4.0 (Mon, 04 Aug 2014 10:10:12 GMT)
  * Homepage: https://github.com/constructjs/input
  *
  * @author makesites
@@ -134,6 +134,10 @@ function extendMain3D(){
 
 		events: events,
 
+		keys : {
+			'f2': '_clickPause'
+		},
+
 		initialize: function( options ){
 
 			// monitor mouse
@@ -221,6 +225,19 @@ function extendMain3D(){
 				// console.log( JSON.stringify( intersects[0].object.parent.rotation ) );
 			}
 
+		},
+
+		// user defined pause actions
+		clickPause: function( e ){
+
+		},
+
+		_clickPause: function( e ){
+			// FIX: don't monitor the keyup events...
+			if( e.type == "keyup" ) return;
+			this.togglePause();
+			// user events
+			this.clickPause( e );
 		}
 
 	});
@@ -257,7 +274,13 @@ function extendPlayer(){
 			return Player.prototype._start.call( this, options );
 		},
 
-		// gamepad support
+		// events
+		_clickPause: function(e){
+			// bubble up event
+			this.trigger("pause", e);
+		},
+
+		// Gamepad support
 
 		onConnectGamepad: function( e ){
 			//console.log("onConnectGamepad", e );
@@ -301,11 +324,24 @@ function extendPlayer(){
 					// reset state
 					this.state.gamepadButtons = [];
 				}
-
 			}
 
 			this.updateMovementVector();
 			this.updateRotationVector();
+		},
+
+		onGamepadButton: function( e ){
+			var pressed = e.buttons;
+			var previous = this.state.gamepadButtons;
+			//
+			for( var i in pressed ){
+				// Start is used as the pause button (monitor only first click )
+				if( pressed[i] == "Start" && previous.indexOf("Start") == -1 ){
+					this._clickPause( e );
+				}
+			}
+			// add it in the list of pressed buttons
+			this.state.gamepadButtons = pressed;
 		},
 
 
@@ -428,24 +464,7 @@ function extendPlayer(){
 
 		},
 
-		// Gamepad suppport
-
-		onGamepadButton: function( e ){
-			var pressed = e.buttons;
-			var previous = this.state.gamepadButtons;
-			//
-			for( var i in pressed ){
-				// Start is used as the pause button (monitor only first click )
-				if( pressed[i] == "Start" && previous.indexOf("Start") == -1 ){
-					this._clickPause( e );
-				}
-			}
-			// add it in the list of pressed buttons
-			this.state.gamepadButtons = pressed;
-		},
-
-
-		// motion support
+		// Motion support
 		onMotionAccelerometer: function( ){
 			// prerequisite
 			if( !_.inArray("motion", this.options.monitor) ||  !_.inArray("accelerometer", this.options.states.motion) ) return;

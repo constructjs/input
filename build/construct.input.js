@@ -2,7 +2,7 @@
  * @name construct.input
  * A construct.js extension that abstracts the use of backbone-input
  *
- * Version: 0.4.0 (Mon, 04 Aug 2014 10:10:12 GMT)
+ * Version: 0.4.0 (Mon, 04 Aug 2014 10:38:13 GMT)
  * Homepage: https://github.com/constructjs/input
  *
  * @author makesites
@@ -235,9 +235,10 @@ function extendMain3D(){
 		_clickPause: function( e ){
 			// FIX: don't monitor the keyup events...
 			if( e.type == "keyup" ) return;
-			this.togglePause();
 			// user events
 			this.clickPause( e );
+			// broadcast to pause the 3D space
+			this.trigger("pause", e);
 		}
 
 	});

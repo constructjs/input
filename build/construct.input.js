@@ -252,6 +252,7 @@ function extendPlayer(){
 					controls: { lon: 0, lat: 0 }
 				});
 			}
+			this.on( "gamepadButton", _.bind(this.onGamepadButton, this) );
 
 			return Player.prototype._start.call( this, options );
 		},
@@ -285,12 +286,20 @@ function extendPlayer(){
 
 				// monitor buttons
 				var buttons = data[0].buttons;
+				var pressed = [];
 				for(var i in buttons){
 					// true if it is pressed...
-					if( buttons[i] ){
+					if( buttons[i].value ){
 						var button = this._buttonKey( i );
-						this.trigger( button );
+						pressed.push( button );
 					}
+				}
+				// one event trigger for the whole button set
+				if( pressed.length ){
+					this.trigger( "gamepadButton", { buttons: pressed });
+				} else {
+					// reset state
+					this.state.gamepadButtons = [];
 				}
 
 			}
@@ -418,6 +427,23 @@ function extendPlayer(){
 			//console.log( JSON.stringify( this.state.move ) );
 
 		},
+
+		// Gamepad suppport
+
+		onGamepadButton: function( e ){
+			var pressed = e.buttons;
+			var previous = this.state.gamepadButtons;
+			//
+			for( var i in pressed ){
+				// Start is used as the pause button (monitor only first click )
+				if( pressed[i] == "Start" && previous.indexOf("Start") == -1 ){
+					this._clickPause( e );
+				}
+			}
+			// add it in the list of pressed buttons
+			this.state.gamepadButtons = pressed;
+		},
+
 
 		// motion support
 		onMotionAccelerometer: function( ){

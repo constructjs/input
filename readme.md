@@ -1,18 +1,18 @@
 # Construct: Input
 
-An extension for [Construct.js](http://github.com/makesites/construct) to include bindings for various input devices - namely: mouse, touch, gamepad. 
+An extension for [Construct.js](http://github.com/makesites/construct) to include bindings for various input devices - namely: mouse, touch, gamepad.
 
 
 ## Install
 
-Using bower: 
+Using bower:
 ```
 bower install construct.input
 ```
 
 ## Usage
 
-First configure the extension with the input devises you will be including (before construct is initiated)
+First configure the extension with the input devices you will be including (before construct is initiated)
 ```
 construct.input(["mouse", "touch"]);
 ```

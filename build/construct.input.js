@@ -2,7 +2,7 @@
  * @name construct.input
  * A construct.js extension that abstracts the use of backbone-input
  *
- * Version: 0.4.0 (Mon, 11 Aug 2014 06:47:00 GMT)
+ * Version: 0.4.0 (Mon, 11 Aug 2014 10:04:52 GMT)
  * Homepage: https://github.com/constructjs/input
  *
  * @author makesites
@@ -260,6 +260,8 @@ function extendPlayer(){
 		},
 
 		_start: function( options ){
+
+			_.bindAll(this, 'updateData');
 
 			// events
 			if( this.options.controls ){
@@ -554,6 +556,9 @@ function extendPlayer(){
 			// expose the rotation vector for convenience
 			this.object.rotation.setFromQuaternion( this.object.quaternion, this.object.rotation.order );
 
+			// update data
+			this.updateData(["position", "rotation"]);
+
 		},
 
 		updateControlsFlyVR: function( e ){
@@ -573,6 +578,9 @@ function extendPlayer(){
 
 			// expose the rotation vector for convenience
 			this.object.rotation.setFromQuaternion( this.object.quaternion, this.object.rotation.order );
+
+			// update data
+			this.updateData(["position", "rotation"]);
 
 		},
 
@@ -629,6 +637,8 @@ function extendPlayer(){
 			this.data.set({
 				controls: data
 			});
+			// update (regular) data
+			this.updateData(["position", "rotation"]);
 		},
 
 		// the camera follows the player objject from a distance
@@ -640,6 +650,29 @@ function extendPlayer(){
 		updateControlsRotate: function( e ){
 
 		},
+
+		// update data model (name too common?)
+		// use debounce to save some processing?
+		//updateData: _.debounce(function( types ){
+		updateData: function( types ){
+
+			types = types || [];
+			// if not an array assume a string (of one item)
+			if( !(types instanceof Array) ) types = [types];
+			var data = {};
+
+			for( var i in types ){
+				var type = types[i];
+				if( this.object[type] ){
+					var property = this.object[type];
+					data[type] = [ property.x , property.y , property.z ];
+				}
+			}
+			// update data
+			this.data.set( data );
+
+		},
+		//}, 100),
 
 		// temp method - replace with $3d dimensions
 		getContainerDimensions : function() {

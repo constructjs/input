@@ -2,7 +2,7 @@
  * @name construct.input
  * A construct.js extension that abstracts the use of backbone-input
  *
- * Version: 0.4.0 (Mon, 04 Aug 2014 10:38:13 GMT)
+ * Version: 0.4.0 (Mon, 11 Aug 2014 06:47:00 GMT)
  * Homepage: https://github.com/constructjs/input
  *
  * @author makesites
@@ -57,19 +57,19 @@
 	construct.config = Object.extend(construct.config, {
 		"paths": {
 			"backbone.input.keys" : [
-				"//rawgithub.com/backbone-input/keys/master/build/backbone.input.keys"
+				"//rawgit.com/backbone-input/keys/master/build/backbone.input.keys"
 			],
 			"backbone.input.touch" : [
-				"//rawgithub.com/backbone-input/touch/master/build/backbone.input.touch"
+				"//rawgit.com/backbone-input/touch/master/build/backbone.input.touch"
 			],
 			"backbone.input.mouse" : [
-				"//rawgithub.com/backbone-input/mouse/master/build/backbone.input.mouse"
+				"//rawgit.com/backbone-input/mouse/master/build/backbone.input.mouse"
 			],
 			"backbone.input.gamepad" : [
-				"//rawgithub.com/backbone-input/gamepad/master/build/backbone.input.gamepad"
+				"//rawgit.com/backbone-input/gamepad/master/build/backbone.input.gamepad"
 			],
 			"backbone.input.motion" : [
-				"//rawgithub.com/backbone-input/motion/master/build/backbone.input.motion"
+				"//rawgit.com/backbone-input/motion/master/build/backbone.input.motion"
 			]
 		},
 		"shim": {
@@ -356,14 +356,15 @@ function extendPlayer(){
 			var press = ( e.type == "keydown" ); // options: keydown, keyup
 
 			var keys = this._keys._moveKeys;
+			var paused = this.options.keys.pause || [];
 
 			switch( key ){
 
 				// move
-				case keys[0]: this.state.move.forward = ( press ) ? 1 : 0; break;
-				case keys[1]: this.state.move.left = ( press ) ? 1 : 0; break;
-				case keys[2]: this.state.move.back = ( press ) ? 1 : 0; break;
-				case keys[3]: this.state.move.right = ( press ) ? 1 : 0; break;
+				case keys[0]: this.state.move.forward = ( press && !_.inArray(key, paused) ) ? 1 : 0; break;
+				case keys[1]: this.state.move.left = ( press && !_.inArray(key, paused) ) ? 1 : 0; break;
+				case keys[2]: this.state.move.back = ( press && !_.inArray(key, paused) ) ? 1 : 0; break;
+				case keys[3]: this.state.move.right = ( press && !_.inArray(key, paused) ) ? 1 : 0; break;
 
 			}
 
@@ -378,14 +379,15 @@ function extendPlayer(){
 			var press = ( e.type == "keydown" ); // options: keydown, keyup
 
 			var keys = this._keys._rotateKeys;
+			var paused = this.options.keys.pause || [];
 
 			switch( key ){
 
 				// rotate
-				case keys[0]: this.state.move.pitchUp = ( press ) ? 1 : 0; break;
-				case keys[1]: this.state.move.yawLeft = ( press ) ? 1 : 0; break;
-				case keys[2]: this.state.move.pitchDown = ( press ) ? 1 : 0; break;
-				case keys[3]: this.state.move.yawRight = ( press ) ? 1 : 0; break;
+				case keys[0]: this.state.move.pitchUp = ( press && !_.inArray(key, paused) ) ? 1 : 0; break;
+				case keys[1]: this.state.move.yawLeft = ( press && !_.inArray(key, paused) ) ? 1 : 0; break;
+				case keys[2]: this.state.move.pitchDown = ( press && !_.inArray(key, paused) ) ? 1 : 0; break;
+				case keys[3]: this.state.move.yawRight = ( press && !_.inArray(key, paused) ) ? 1 : 0; break;
 
 			}
 

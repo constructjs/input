@@ -2,7 +2,7 @@
  * @name construct.input
  * A construct.js extension that abstracts the use of backbone-input
  *
- * Version: 0.4.0 (Mon, 11 Aug 2014 10:04:52 GMT)
+ * Version: 0.4.0 (Sun, 26 Jun 2016 01:33:50 GMT)
  * Homepage: https://github.com/constructjs/input
  *
  * @author makesites
@@ -44,7 +44,7 @@
 			construct.config.deps.push("backbone.input.motion");
 		}
 		// save options
-		Object.extend(construct.options, { input: options });
+		$.extend({}, construct.options, { input: options });
 
 		return function( e ){
 			//console.log( "update" );
@@ -54,7 +54,7 @@
 
 
 	// Dependencies
-	construct.config = Object.extend(construct.config, {
+	construct.config = $.extend({}, construct.config, {
 		"paths": {
 			"backbone.input.keys" : [
 				"//rawgit.com/backbone-input/keys/master/build/backbone.input.keys"

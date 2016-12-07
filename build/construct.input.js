@@ -2,7 +2,7 @@
  * @name construct.input
  * A construct.js extension that abstracts the use of backbone-input
  *
- * Version: 0.4.0 (Sun, 26 Jun 2016 01:33:50 GMT)
+ * Version: 0.4.5 (Wed, 07 Dec 2016 02:28:50 GMT)
  * Homepage: https://github.com/constructjs/input
  *
  * @author makesites
@@ -12,12 +12,63 @@
  * @license MIT license
  */
 
- (function(){
+(function (lib) {
+
+	//"use strict";
+
+	if (typeof define === 'function' && define.amd) {
+		// AMD. Register as an anonymous module.
+		define(['jquery', 'underscore', 'backbone'], lib);
+	} else {
+		// Browser globals
+		lib($, _, Backbone);
+	}
+}(function ($, _, Backbone) {
+
 	// exit now if contruct hasn't already been defined
 	if(typeof construct == "undefined") return;
 
 
-		construct.input = function( options ){
+	
+	// Helpers
+	// - loop through objects to get meshes
+	function getMeshes( objects, meshes ){
+		//fallbacks
+		objects = objects || {};
+		meshes = meshes || [];
+		for( var i in objects) {
+			var object = objects[i];
+			if( object instanceof THREE.Mesh ){
+				meshes.push( object );
+			} else {
+				// assume it's an Object3D
+				if( object.children ) {
+					meshes = meshes.concat( getMeshes( object.children ) );
+				}
+			}
+		}
+
+		return meshes;
+	}
+
+	// this method also exists in APP.View as part of the touch plugin...
+	function isTouch() {
+		return 'ontouchstart' in document && !('callPhantom' in window);
+	}
+
+	// underscore helpers
+	_.mixin({
+		inArray: _.inArray || function(value, array){
+			return array.indexOf(value) > -1;
+		},
+		// - Check if in debug mode (requires the existence of a global DEBUG var)
+		// Usage: _.inDebug()
+		inDebug : _.inDebug || function() {
+			return ( typeof DEBUG != "undefined" && DEBUG );
+		}
+	});
+
+	construct.input = function( options ){
 		// options is an array...
 		options = options || [];
 		//console.log(options);
@@ -325,7 +376,7 @@ function extendPlayer(){
 					this.trigger( "gamepadButton", { buttons: pressed });
 				} else {
 					// reset state
-					this.state.gamepadButtons = [];
+					this.state.set({ 'gamepadButtons': [] });
 				}
 			}
 
@@ -335,7 +386,7 @@ function extendPlayer(){
 
 		onGamepadButton: function( e ){
 			var pressed = e.buttons;
-			var previous = this.state.gamepadButtons;
+			var previous = this.state.get('gamepadButtons');
 			//
 			for( var i in pressed ){
 				// Start is used as the pause button (monitor only first click )
@@ -344,7 +395,7 @@ function extendPlayer(){
 				}
 			}
 			// add it in the list of pressed buttons
-			this.state.gamepadButtons = pressed;
+			this.state.set('gamepadButtons', pressed);
 		},
 
 
@@ -700,44 +751,6 @@ function extendPlayer(){
 
 }
 
-	// Helpers
-	// - loop through objects to get meshes
-	function getMeshes( objects, meshes ){
-		//fallbacks
-		objects = objects || {};
-		meshes = meshes || [];
-		for( var i in objects) {
-			var object = objects[i];
-			if( object instanceof THREE.Mesh ){
-				meshes.push( object );
-			} else {
-				// assume it's an Object3D
-				if( object.children ) {
-					meshes = meshes.concat( getMeshes( object.children ) );
-				}
-			}
-		}
-
-		return meshes;
-	}
-
-	// this method also exists in APP.View as part of the touch plugin...
-	function isTouch() {
-		return 'ontouchstart' in document && !('callPhantom' in window);
-	}
-
-	// underscore helpers
-	_.mixin({
-		inArray: _.inArray || function(value, array){
-			return array.indexOf(value) > -1;
-		},
-		// - Check if in debug mode (requires the existence of a global DEBUG var)
-		// Usage: _.inDebug()
-		inDebug : _.inDebug || function() {
-			return ( typeof DEBUG != "undefined" && DEBUG );
-		}
-	});
-
 
 
 	// Update views after dependencies are loaded
@@ -746,4 +759,7 @@ function extendPlayer(){
 		extendPlayer();
 	});
 
-})();
+	// return for module loaders?
+	//return construct.input;
+
+}));

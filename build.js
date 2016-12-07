@@ -23,11 +23,11 @@ _handlebars.registerHelper('license', function(items){
 // - concatinate all files
 concat({
 	src : [
+		'lib/helpers.js',
 		'lib/input.js',
 		'lib/config.js',
 		'lib/main3d.js',
-		'lib/player.js',
-		'lib/helpers.js'
+		'lib/player.js'
 	],
 	dest : 'build/construct.input.js'
 });
